@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ForgotUserEmailJob;
 use App\Mail\ForgotPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,7 +49,8 @@ class AuthController extends Controller
         $password = uniqid();
         $user->password = bcrypt($password);
         $user->save();
-        Mail::to($user)->send(new ForgotPassword($password));
+
+        dispatch(new ForgotUserEmailJob($user, $password));
 
         return redirect(route("home"));
     }
