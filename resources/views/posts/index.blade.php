@@ -9,7 +9,7 @@
     @foreach($posts as $post)
         @include("posts.partials.item", ["post" => $post])
     @endforeach
-
+    {{ helloWorld() }}
     {{ $posts->links() }}
 </div>
 @endsection
