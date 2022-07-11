@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\AdminUser;
+use App\Models\Post;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 

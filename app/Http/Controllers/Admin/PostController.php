@@ -16,6 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Post::class);
         $posts = Post::orderBy("created_at", "DESC")->paginate(3);
 
         return view('admin.posts.index', [
@@ -49,29 +50,25 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        $post = Post::findOrFail($id);
         return view('admin.posts.create', [
             "post" => $post,
         ]);
     }
 
-
     /**
      * Update the specified resource in storage.
      *
      * @param  PostFormRequest  $request
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function update(PostFormRequest $request, $id)
+    public function update(PostFormRequest $request, Post $post)
     {
-        $post = Post::findOrFail($id);
-
         $data = $request->validated();
         if($request->has("thumbnail")) {
             $thumbnail = str_replace("public/posts", "", $request->file("thumbnail")->store("public/posts"));
@@ -86,12 +83,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Post $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        Post::destroy($id);
+        $post->delete();
 
         return redirect(route("admin.posts.index"));
     }
